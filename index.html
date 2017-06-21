@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title></title>
+	    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
+	    <link rel="stylesheet" type="text/css" href="app/css/main.css"/>
+
+
+</head>
+<body ng-app = "DataApp">
+	<nav class="navbar navbar-toggleable-md navbar-light bg-faded" ng-controller="myCtrl">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="#">Navbar</a>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+
+
+    </ul>
+    <form class="form-inline my-2 my-lg-0" >
+      <input class="form-control mr-sm-2" type="text" placeholder="Email">
+      <input class="form-control mr-sm-2" type="password"  placeholder="Password">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit" ">Login</button>
+      <a  style="padding-left: 15px; font-size: 15px;">Create Account</a>
+    </form>
+    
+
+  </div>
+</nav>
+
+<div ng-controller="getDataCtrl">
+<div class="container">
+<br><br><br>
+  <div class="row">
+
+    <div class="col-md-3">
+      <h4>NR Grid Frequency</h4>
+      <p>{{nr_grid_frequency || 0}}</p>
+    </div>
+    <div class="col-md-3">
+      <h4>DSM Rate</h4>
+      <p>{{dsm_rate || 0 }}</p>
+    </div>
+    <div class="col-md-3">
+      <h4>WR Grid Frequncy</h4>
+      <p>{{wr_grid_frequency || 0}}</p>
+    </div>
+    <div class="col-md-3">
+      <h4>Deviation Rate</h4>
+      <p>{{deviation_rate || 0}}</p>
+    </div>
+  </div>
+</div> 
+
+</div>
+
+
+
+ <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+ </script> 
+
+ <script >
+  var app = angular.module('DataApp', []);
+  app.controller('myCtrl', function($scope, $http) {
+    $http.get("/scrape")
+    .then(function(response) {
+        console.log(response);
+    });
+});
+
+app.controller('getDataCtrl',function($scope,  $http , $interval){
+
+  function getData(){
+      $http.get("/data")
+      .then(function(response){
+        $scope.nr_grid_frequency = response.data[0].nr_grid_frequency;
+        $scope.wr_grid_frequency = response.data[0].wr_grid_frequency;
+        $scope.dsm_rate = response.data[0].dsm_rate;
+        $scope.deviation_rate = response.data[0].deviation_rate;
+      })
+  }
+  $interval(function(){
+    getData();
+  }, 2000);
+
+});
+ </script>
+
+</body>
+</html>
