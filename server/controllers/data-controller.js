@@ -1,21 +1,30 @@
 url = 'http://nrldc.in/';
 url2 = 'http://www.wrldc.in/';
-var json = { nr_grid_frequency : "", dsm_rate : "", wr_grid_frequency  : "",deviation_rate: "" };
+url3 = 'http://www.srldc.org/';
+url4 = 'http://www.erldc.org/';
+
+
+var json = { 	nr_grid_frequency : "", nr_dsm_rate : "",nr_time: "",
+				wr_grid_frequency : "", wr_dsm_rate : "",wr_time: "",
+				er_grid_frequency : "",	er_dsm_rate : "",er_time: "",
+				sr_grid_frequency : "" 
+			};
 
 var request = require('request');
 var cheerio = require('cheerio');
 var Data = require("../datasets/data");
 
- function a(){
+function nr(){
  	 request(url, function(error, response, html){
 	    	if(!error){
 	        var $ = cheerio.load(html);
 	        $('#black-studio-tinymce-14').filter(function(){
 	        var data_1 = $(this).find('p').slice(1,2);      
-	        var data_2 =   $(this).find('p').slice(2,3);          
-	        json.nr_grid_frequency = data_1.find('span').first().text();	       
-	      //  console.log(data.find('span:nth-child(2)').text());        
-	       json.dsm_rate = data_2.find('span').first().text();
+	        var data_2 =   $(this).find('p').slice(2,3);
+	        var data_6 =   $(this).find('p').slice(3,4);           
+	        json.nr_grid_frequency = data_1.find('span').first().text();
+            json.nr_dsm_rate = data_2.find('span').first().text();
+	        json.nr_time= data_6.find('span').first().text();
 
         
     	})
@@ -25,36 +34,91 @@ var Data = require("../datasets/data");
 	}) 
 };
 
+	function er(){
+ 	 request(url4, function(error, response, html){
+	    	if(!error){
+	        var $ = cheerio.load(html);
+	        $('body').filter(function(){
+	        var data_9  =  $(this).find('#ctl00_ContentPlaceHolder1_Label1');    
+	        var data_10 =  $(this).find('#ctl00_ContentPlaceHolder1_Label5');
+	        //data_10=data_10/100;
+	        var data_11 =  $(this).find('#ctl00_ContentPlaceHolder1_Label2');        
+	        json.er_grid_frequency = data_9.text();   
+	        json.er_dsm_rate = data_10.text();
+	        json.er_time= data_11.text();
 
- function b(){
+        
+    	})
+
+ 		}
+	}) 
+};
+
+
+function sr(){
+	request(url3, function(error, response, html){
+	    	if(!error){
+	        var $ = cheerio.load(html);
+	  	    $('body').filter(function(){
+	        var data_7 = $(this).find('#ctl00_ContentPlaceHolder1_Label1');      
+	        var data_8 = $(this).find('#ctl00_ContentPlaceHolder1_Label1a');        
+	        json.sr_grid_frequency = data_7.text();  	           
+	        //json.sr_dsm_rate= data_8.text();       
+	        json.sr_time= data_8.text();
+
+        
+    	})
+
+ 		}// If statement ends here
+
+	}) 
+};
+
+ function wr(){
  	 request(url2, function(error, response, html){
 	    	if(!error){
 	        var $ = cheerio.load(html);
 	  	    $('body').filter(function(){
-	        var data_3 = $(this).find('#ctl00_ContentPlaceHolder1_Label1');      
-	        var data_4 =   $(this).find('#ctl00_ContentPlaceHolder1_Label2');          
-	        json.wr_grid_frequency = data_3.text();  	           
-	       json.deviation_rate = data_4.text();       
+	        var data_4 = $(this).find('#ctl00_ContentPlaceHolder1_Label1');      
+	        var data_5 =   $(this).find('#ctl00_ContentPlaceHolder1_Label2');
+	        var data_6 = $(this).find('#ctl00_ContentPlaceHolder1_ftime');        
+	        json.wr_grid_frequency = data_4.text();  	           
+	        json.wr_dsm_rate= data_5.text();       
+	        json.wr_time= data_6.text();
     	})
  		}// If statement ends here
 	}) 
-
- 	 console.log(json);
+ 	console.log(json);
  	 var data = new Data(json);
-
  	 data.save();
- 	/* fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){
-
-    console.log('File successfully written! ');
-
-	})*/
 };
+
 module.exports.scrapeData = function(req , res){
 
+	 setTimeout(function () {
+       nr();
+		er();
+		sr();
+		wr();
+        setInterval(function() {
+			nr();
+			er();
+			sr();
+			wr();
+		}, 60000);
+    }, 2000);
+
+
+	/*nr();
+	er();
+	sr();
+	wr();
 	setInterval(function() {
-	a();
-	b();
-}, 5000);
+	nr();
+	er();
+	sr();
+	wr();
+}, 60000);*/
 
 	res.status(200);
 
@@ -63,7 +127,7 @@ module.exports.scrapeData = function(req , res){
 
 module.exports.getData = function(req , res){
 
-	Data.find({}).sort({_id:-1}).limit(1).exec(function(err , Data){
+	Data.find({}).sort({_id: -1}).limit(1).exec(function(err , Data){
 		if(err){
 			res.error(err);
 		}else{

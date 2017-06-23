@@ -50,17 +50,49 @@
       <p>{{nr_grid_frequency || 0}}</p>
     </div>
     <div class="col-md-3">
-      <h4>DSM Rate</h4>
-      <p>{{dsm_rate || 0 }}</p>
+      <h4> NR DSM Rate</h4>
+      <p>{{nr_dsm_rate || 0 }}</p>
+    </div>
+    <div class="col-md-3">
+      <h4>NR Time</h4>
+      <p>{{nr_time || 0 }}</p>
     </div>
     <div class="col-md-3">
       <h4>WR Grid Frequncy</h4>
       <p>{{wr_grid_frequency || 0}}</p>
     </div>
     <div class="col-md-3">
-      <h4>Deviation Rate</h4>
-      <p>{{deviation_rate || 0}}</p>
+      <h4>WR DSM Rate</h4>
+      <p>{{wr_dsm_rate || 0}}</p>
     </div>
+    <div class="col-md-3">
+      <h4>WR Time</h4>
+      <p>{{wr_time || 0 }}</p>
+    </div>
+
+     <div class="col-md-3">
+      <h4>ER Grid Frequncy</h4>
+      <p>{{er_grid_frequency || 0}}</p>
+    </div>
+    <div class="col-md-3">
+      <h4>ER DSM Rate</h4>
+      <p>{{er_dsm_rate || 0}}</p>
+    </div>
+    <div class="col-md-3">
+      <h4>ER Time</h4>
+      <p>{{er_time || 0 }}</p>
+    </div>
+
+     <div class="col-md-3">
+      <h4>SR Grid Frequncy</h4>
+      <p>{{sr_grid_frequency || 0}}</p>
+    </div>
+   
+    <div class="col-md-3">
+      <h4>SR Time</h4>
+      <p>{{sr_time || 0 }}</p>
+    </div>
+
   </div>
 </div> 
 
@@ -74,6 +106,7 @@
  <script >
   var app = angular.module('DataApp', []);
   app.controller('myCtrl', function($scope, $http) {
+
     $http.get("/scrape")
     .then(function(response) {
         
@@ -85,15 +118,24 @@ app.controller('getDataCtrl',function($scope,  $http , $interval){
   function getData(){
       $http.get("/data")
       .then(function(response){
+        console.log(response);
         $scope.nr_grid_frequency = response.data[0].nr_grid_frequency;
         $scope.wr_grid_frequency = response.data[0].wr_grid_frequency;
-        $scope.dsm_rate = response.data[0].dsm_rate;
-        $scope.deviation_rate = response.data[0].deviation_rate;
+        $scope.er_grid_frequency = response.data[0].er_grid_frequency;
+        $scope.sr_grid_frequency = response.data[0].sr_grid_frequency;
+        $scope.nr_dsm_rate = response.data[0].nr_dsm_rate;
+         $scope.wr_dsm_rate = response.data[0].wr_dsm_rate;
+          $scope.er_dsm_rate = response.data[0].er_dsm_rate;
+          $scope.nr_time = response.data[0].nr_time;
+         $scope.wr_time = response.data[0].wr_time;
+          $scope.er_time = response.data[0].er_time;
+          $scope.sr_time = response.data[0].sr_time;        
       })
   }
+  getData();
   $interval(function(){
     getData();
-  }, 2000);
+  }, 5000);
 
 });
  </script>
