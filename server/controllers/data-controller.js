@@ -100,11 +100,9 @@ module.exports.scrapeData = function(req , res){
        		er(function(){
        			sr(function(){
        				wr();
-       			});
-       		});
+       			})		
+       		})	
        });
-		
-		
 		 
 	
 

@@ -4,6 +4,8 @@ var fs = require('fs');
 var request = require('request');
 var cheerio = require('cheerio');
 var app     = express();
+var http = require('http');
+
 var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/data');
 var dataController = require("./server/controllers/data-controller");
@@ -20,7 +22,10 @@ app.get('/data' , dataController.getData);
 
 app.listen(port, function() {
 console.log("Listening on " + port);
+	
 });
+
+
 
 
 
