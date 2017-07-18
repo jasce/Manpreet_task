@@ -7,7 +7,7 @@ url4 = 'http://www.erldc.org/';
 var json = { 	nr_grid_frequency : "", nr_dsm_rate : "",nr_time: "",
 				wr_grid_frequency : "", wr_dsm_rate : "",wr_time: "",
 				er_grid_frequency : "",	er_dsm_rate : "",er_time: "",
-				sr_grid_frequency : "" , sr_time: ""
+				sr_grid_frequency : "", sr_time: ""
 			};
 
 var request = require('request');
@@ -42,10 +42,13 @@ function nr(){
 	        var data_9  =  $(this).find('#ctl00_ContentPlaceHolder1_Label1');    
 	        var data_10 =  $(this).find('#ctl00_ContentPlaceHolder1_Label5');
 	        //data_10=data_10/100;
-	        var data_11 =  $(this).find('#ctl00_ContentPlaceHolder1_Label2');        
+	        var data_11 =  $(this).find('#ctl00_ContentPlaceHolder1_Label2');          
+	            
 	        json.er_grid_frequency = data_9.text();   
 	        json.er_dsm_rate = data_10.text();
-	        json.er_time= data_11.text();
+	        json.er_time= data_11.text();  
+
+	        console.log(json);      
 
         
     	})
@@ -61,7 +64,8 @@ function sr(){
 	        var $ = cheerio.load(html);
 	  	    $('body').filter(function(){
 	        var data_7 = $(this).find('#ctl00_ContentPlaceHolder1_Label1');      
-	        var data_8 = $(this).find('#ctl00_ContentPlaceHolder1_Label1a');        
+	        var data_8 = $(this).find('#ctl00_ContentPlaceHolder1_Label1a'); 
+	        console.log(data_7.html());       
 	        json.sr_grid_frequency = data_7.text();  	           
 	        //json.sr_dsm_rate= data_8.text();       
 	        json.sr_time= data_8.text();
@@ -73,6 +77,7 @@ function sr(){
 
 	}) 
 };
+
 
  function wr(){
  	 request(url2, function(error, response, html){
@@ -98,8 +103,8 @@ module.exports.scrapeData = function(req , res){
 	 
        nr();
        er();
-       	sr();
-       	wr();
+       sr();
+       wr();
        				
        		
      
