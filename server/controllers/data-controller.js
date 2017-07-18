@@ -95,19 +95,18 @@ function sr(){
 
 module.exports.scrapeData = function(req , res){
 
-	 setTimeout(function () {
-       nr();
-		er();
-		sr();
-		wr();
-        setInterval(function() {
-			nr();
-			er();
-			sr();
-			wr();
-		}, 60000);
-    }, 2000);
-
+	 
+       nr(function(){
+       		er(function(){
+       			sr(function(){
+       				wr();
+       			});
+       		});
+       });
+		
+		
+		 
+	
 
 	/*nr();
 	er();
