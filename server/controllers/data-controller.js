@@ -7,7 +7,7 @@ url4 = 'http://www.erldc.org/';
 var json = { 	nr_grid_frequency : "", nr_dsm_rate : "",nr_time: "",
 				wr_grid_frequency : "", wr_dsm_rate : "",wr_time: "",
 				er_grid_frequency : "",	er_dsm_rate : "",er_time: "",
-				sr_grid_frequency : "" 
+				sr_grid_frequency : "" , sr_time: ""
 			};
 
 var request = require('request');
