@@ -25,7 +25,7 @@ console.log("Listening on " + port);
 http.get("http://man-preet.herokuapp.com/scrape");
 setInterval(function(){
 	http.get("http://man-preet.herokuapp.com/scrape");
-}, 3000); // 5 minutes
+}, 300000); // 5 minutes
 	
 });
 
