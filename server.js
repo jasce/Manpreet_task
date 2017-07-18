@@ -22,8 +22,9 @@ app.get('/data' , dataController.getData);
 
 app.listen(port, function() {
 console.log("Listening on " + port);
+http.get("http://man-preet.herokuapp.com/scrape");
 setInterval(function(){
-	http.get("http://man-preet.herokuapp.com");
+	http.get("http://man-preet.herokuapp.com/scrape");
 }, 3000); // 5 minutes
 	
 });

@@ -96,13 +96,13 @@ function sr(){
 module.exports.scrapeData = function(req , res){
 
 	 
-       nr(function(){
-       		er(function(){
-       			sr(function(){
-       				wr();
-       			})		
-       		})	
-       });
+       nr();
+       er();
+       	sr();
+       	wr();
+       				
+       		
+     
 		 
 	
 
